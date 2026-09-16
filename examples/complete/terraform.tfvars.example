@@ -1,0 +1,4 @@
+# Copy to terraform.tfvars and replace with the values Jump provides.
+# Nothing here is a default: every value is specific to your onboarding.
+
+project_id = "your-key-project"
