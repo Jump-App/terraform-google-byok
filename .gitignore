@@ -1,0 +1,20 @@
+# Terraform state — never commit; it can contain sensitive values.
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Variable files. Values are customer-specific and supplied at onboarding,
+# so nothing beyond the checked-in *.example belongs in this repo.
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Crash logs and plan output
+crash.log
+crash.*.log
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
