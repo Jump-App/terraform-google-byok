@@ -104,6 +104,106 @@ Then send Jump the `granted_members` output to confirm the grants landed.
 
 A worked example is in [`examples/complete`](examples/complete).
 
+## Setting up without Terraform
+
+The module only grants access to a key you already have. If you would rather
+not use Terraform, you can create the key and grant the same access by hand,
+with the `gcloud` CLI or in the Google Cloud console. Either way, the result is
+the same as applying the module: the identities above get
+`roles/cloudkms.cryptoKeyEncrypterDecrypter` on your key, and nothing else.
+
+<details>
+<summary><strong>With the gcloud CLI</strong></summary>
+
+Set the project that will hold the key, and the key location for your
+deployment from the [region table](#which-region-should-the-key-be-in):
+
+```sh
+PROJECT=your-key-project
+LOCATION=europe-west1
+KEYRING=jump-byok
+KEY=jump
+```
+
+Enable Cloud KMS, then create a key ring and a key:
+
+```sh
+gcloud services enable cloudkms.googleapis.com --project="$PROJECT"
+
+gcloud kms keyrings create "$KEYRING" \
+  --location="$LOCATION" --project="$PROJECT"
+
+gcloud kms keys create "$KEY" \
+  --keyring="$KEYRING" --location="$LOCATION" --project="$PROJECT" \
+  --purpose=encryption
+```
+
+To rotate the key automatically, add `--rotation-period=90d` and
+`--next-rotation-time=<first rotation, e.g. 2027-01-01T00:00:00Z>`. Add
+`--protection-level=hsm` for an HSM-backed key.
+
+Grant Jump's identities access to the key. Add any identities Jump gave you
+during onboarding to the list:
+
+```sh
+for SA in \
+  service-228790252436@gcp-sa-cloud-sql.iam.gserviceaccount.com \
+  service-228790252436@gs-project-accounts.iam.gserviceaccount.com \
+  service-228790252436@compute-system.iam.gserviceaccount.com \
+  bq-228790252436@bigquery-encryption.iam.gserviceaccount.com
+do
+  gcloud kms keys add-iam-policy-binding "$KEY" \
+    --keyring="$KEYRING" --location="$LOCATION" --project="$PROJECT" \
+    --member="serviceAccount:$SA" \
+    --role=roles/cloudkms.cryptoKeyEncrypterDecrypter
+done
+```
+
+Check the grants, and get the key's full resource ID to send to Jump:
+
+```sh
+gcloud kms keys get-iam-policy "$KEY" \
+  --keyring="$KEYRING" --location="$LOCATION" --project="$PROJECT"
+
+gcloud kms keys describe "$KEY" \
+  --keyring="$KEYRING" --location="$LOCATION" --project="$PROJECT" \
+  --format='value(name)'
+```
+
+To revoke access later, run the same loop with `remove-iam-policy-binding` in
+place of `add-iam-policy-binding`.
+
+</details>
+
+<details>
+<summary><strong>In the Google Cloud console</strong></summary>
+
+1. In the project that will hold the key, open **Security → Key Management**.
+   Enable the Cloud KMS API if prompted.
+2. Click **Create key ring**. Give it a name, set **Location type** to
+   **Region**, and choose the key location for your deployment from the
+   [region table](#which-region-should-the-key-be-in). Do not choose a
+   multi-region location.
+3. Create a key in the key ring. Choose **Generated key**, protection level
+   **Software** (or **HSM**), and purpose **Symmetric encrypt/decrypt**. Set a
+   rotation period if you want automatic rotation.
+4. Open the key and go to the **Permissions** tab. Click **Grant access**.
+5. Under **New principals**, add each of these, plus any identities Jump gave
+   you during onboarding:
+   - `service-228790252436@gcp-sa-cloud-sql.iam.gserviceaccount.com`
+   - `service-228790252436@gs-project-accounts.iam.gserviceaccount.com`
+   - `service-228790252436@compute-system.iam.gserviceaccount.com`
+   - `bq-228790252436@bigquery-encryption.iam.gserviceaccount.com`
+6. Under **Role**, choose **Cloud KMS CryptoKey Encrypter/Decrypter**, then
+   click **Save**.
+7. From the key's actions menu, choose **Copy resource name**, and send it to
+   Jump.
+
+To revoke access later, remove these principals on the key's **Permissions**
+tab.
+
+</details>
+
 ## Inputs
 
 | Name | Type | Required | Description |
