@@ -20,7 +20,7 @@ module "jump_byok" {
   # granted by default. Add any further identities Jump gives you during
   # onboarding.
   additional_identities = {
-    turbopuffer = "example@example.iam.gserviceaccount.com"
+    third_party = "example@example.iam.gserviceaccount.com"
   }
 }
 

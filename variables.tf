@@ -77,9 +77,8 @@ variable "jump_service_agents" {
 variable "additional_identities" {
   description = <<-EOT
     Further service accounts that need to encrypt and decrypt with the key,
-    beyond Jump's own service agents, keyed by the system each one belongs to
-    (for example "turbopuffer", for the vector store that holds your
-    embeddings). Jump supplies these during onboarding.
+    beyond Jump's own service agents, keyed by the system each one belongs to. 
+    Jump supplies these during onboarding.
 
     Each entry receives roles/cloudkms.cryptoKeyEncrypterDecrypter on this key
     and nothing else.
