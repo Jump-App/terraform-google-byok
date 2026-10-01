@@ -184,10 +184,9 @@ place of `add-iam-policy-binding`.
    **Region**, and choose the key location for your deployment from the
    [region table](#which-region-should-the-key-be-in). Do not choose a
    multi-region location.
-3. Create a key in the key ring. Choose **Generated key**, protection level
-   **Software** (or **HSM**), and purpose **Symmetric encrypt/decrypt**. Set a
-   rotation period if you want automatic rotation.
-4. Open the key and go to the **Permissions** tab. Click **Grant access**.
+3. Enter a name for a new key. Choose protection level
+   **Software** (or **HSM**), key material **Generated key**, and purpose **Symmetric encrypt/decrypt**. Set any other rotation or other optional settings as desired. Finally choose **Create**.
+4. Click on the key name and go to the **Permissions** tab. Click **Grant access**.
 5. Under **New principals**, add each of these, plus any identities Jump gave
    you during onboarding:
    - `service-228790252436@gcp-sa-cloud-sql.iam.gserviceaccount.com`
