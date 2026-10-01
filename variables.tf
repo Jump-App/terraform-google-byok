@@ -42,9 +42,10 @@ variable "jump_service_agents" {
   description = <<-EOT
     Jump's Google-managed service agents that encrypt and decrypt with the
     key, keyed by the system each one belongs to. These are the Cloud SQL,
-    Cloud Storage and Compute Engine service agents of Jump's production
-    project, and are the same for every Jump deployment, so the defaults are
-    correct for every customer. Override only if Jump asks you to.
+    Cloud Storage, Compute Engine and BigQuery service agents of Jump's
+    production project, and are the same for every Jump deployment, so the
+    defaults are correct for every customer. Override only if Jump asks you
+    to.
 
     Each entry receives roles/cloudkms.cryptoKeyEncrypterDecrypter on this key
     and nothing else.
@@ -56,6 +57,7 @@ variable "jump_service_agents" {
     cloudsql = "service-228790252436@gcp-sa-cloud-sql.iam.gserviceaccount.com"
     storage  = "service-228790252436@gs-project-accounts.iam.gserviceaccount.com"
     compute  = "service-228790252436@compute-system.iam.gserviceaccount.com"
+    bigquery = "bq-228790252436@bigquery-encryption.iam.gserviceaccount.com"
   }
 
   validation {

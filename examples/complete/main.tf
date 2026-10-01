@@ -16,8 +16,9 @@ module "jump_byok" {
   jump_deployment_location = "europe-west1"
   crypto_key_id            = "projects/example-keys/locations/europe-west1/keyRings/example-ring/cryptoKeys/example-key"
 
-  # Jump's Cloud SQL, Cloud Storage and Compute service agents are granted by
-  # default. Add any further identities Jump gives you during onboarding.
+  # Jump's Cloud SQL, Cloud Storage, Compute and BigQuery service agents are
+  # granted by default. Add any further identities Jump gives you during
+  # onboarding.
   additional_identities = {
     turbopuffer = "example@example.iam.gserviceaccount.com"
   }

@@ -30,9 +30,10 @@ that your key is in the location you pass as `jump_deployment_location`.
 | `service-228790252436@gcp-sa-cloud-sql.iam.gserviceaccount.com` | Your database and its backups (Cloud SQL) |
 | `service-228790252436@gs-project-accounts.iam.gserviceaccount.com` | Your stored files (Cloud Storage) |
 | `service-228790252436@compute-system.iam.gserviceaccount.com` | Your disks (Compute Engine) |
+| `bq-228790252436@bigquery-encryption.iam.gserviceaccount.com` | Your analytics datasets (BigQuery) |
 | Identities from onboarding (`additional_identities`) | For example, the vector store that holds your embeddings |
 
-The first three are Google-managed service agents belonging to Jump's
+The first four are Google-managed service agents belonging to Jump's
 production Google Cloud project (project number `228790252436`). They are the
 same for every Jump customer, and the module grants them by default. They are
 identifiers, not credentials: no one can sign in as them or create keys for
@@ -109,7 +110,7 @@ A worked example is in [`examples/complete`](examples/complete).
 | --- | --- | --- | --- |
 | `jump_deployment_location` | `string` | yes | Your deployment's key location, from the region table above |
 | `crypto_key_id` | `string` | yes | Full resource ID of your key: `projects/<project>/locations/<location>/keyRings/<ring>/cryptoKeys/<key>` |
-| `jump_service_agents` | `map(string)` | no | Jump's three service agents, keyed by system. Defaults to the addresses above; override only if Jump asks you to |
+| `jump_service_agents` | `map(string)` | no | Jump's four service agents, keyed by system. Defaults to the addresses above; override only if Jump asks you to |
 | `additional_identities` | `map(string)` | no | Further identities needing encrypt/decrypt, keyed by system. Defaults to none |
 
 ## Outputs
