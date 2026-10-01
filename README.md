@@ -80,6 +80,8 @@ and any identities Jump gives you during onboarding.
 module "jump_byok" {
   source  = "Jump-App/byok/google"
   version = "~> 1.0"
+  # Or, over SSH from GitHub instead of the registry (replaces both lines above):
+  # source = "git::ssh://git@github.com/Jump-App/terraform-google-byok.git?ref=v1.0.0"
 
   jump_deployment_location = "europe-west1"
   crypto_key_id            = "projects/your-keys/locations/europe-west1/keyRings/your-ring/cryptoKeys/jump"
