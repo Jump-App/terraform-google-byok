@@ -14,5 +14,5 @@ module "cmek_grants" {
   source = "./modules/cmek-grants"
 
   crypto_key_id               = var.crypto_key_id
-  encrypter_decrypter_members = var.jump_service_agents
+  encrypter_decrypter_members = merge(var.jump_service_agents, var.additional_identities)
 }
