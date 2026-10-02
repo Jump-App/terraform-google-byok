@@ -69,6 +69,10 @@ problem for your platform team, tell Jump.
 
 ## Before you apply
 
+- **A Cloud KMS key** in your deployment's region. The module doesn't create
+  one. Create it in your own Terraform, or follow the key-creation steps in
+  [Setting up without Terraform](#setting-up-without-terraform), then pass its
+  ID as `crypto_key_id`.
 - **The Cloud KMS API** must be enabled in the project holding the key.
 - **You need `roles/cloudkms.admin`** (or equivalent) on the key.
 
